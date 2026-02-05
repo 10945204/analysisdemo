@@ -1,0 +1,76 @@
+Analysis Report for je_samples.xlsx
+===================================
+
+Total Rows: 37905
+Total Columns: 30
+
+Column Descriptions:
+  - JEEntryKey: int64
+  - JENumber: int64
+  - JEIdentifier: int64
+  - GLAccountNumber: object
+  - BLANK: float64
+  - EffectiveDate: datetime64[us]
+  - Period: str
+  - EntryDate: datetime64[us]
+  - PreparerID: str
+  - Source: str
+  - BusinessUnit: str
+  - JEDescription: str
+  - Debit: float64
+  - Credit: float64
+  - Amount: float64
+  - AbsoluteAmount: float64
+  - SysManInd: float64
+  - UserDefined1: float64
+  - UserDefined2: float64
+  - UserDefined3: float64
+  - PeriodFlag: float64
+  - AccountType: str
+  - AccountClass: str
+  - GLAccountStartingBalance: str
+  - GLAccountEndingBalance: float64
+  - SortOrder: float64
+  - GLAccountName: str
+  - Category: float64
+  - Marked: float64
+  - MarkedInReport: float64
+
+Date Ranges:
+  - EffectiveDate: 2014-07-01 00:00:00 to 2016-06-30 00:00:00
+  - EntryDate: 2014-06-25 00:00:00 to 2016-06-30 00:00:00
+
+Financial Analysis:
+  - Total Debit: 43,355,165.55
+  - Total Credit: -43,355,165.55
+  - Total Amount: 0.00
+  - Average Amount: 0.00
+
+Categorical Analysis (Top 5):
+
+  BusinessUnit:
+    - FOOD SERVICE: 18010
+    - HOTEL: 11648
+    - HOTEL PANTRY: 3290
+    - HOUSEKEEPING: 2506
+    - MAINTENANCE: 1961
+
+  Source:
+    - CREDIT CARD RECEIPT        : 10263
+    - CHECK                      : 8602
+    - PURCHASE CARD              : 5276
+    - PAYROLL S/B JV             : 3936
+    - CASH RECEIPT               : 3370
+
+  PreparerID:
+    - POS: 7892
+    - GUESTSYS: 6826
+    - Victoria Simpson|Accounting Manager: 6144
+    - Carolyn Slater|Food Operations Manager       : 5658
+    - Elizabeth Rees|Food Operations Manager       : 4444
+
+  AccountType:
+    - Assets: 20110
+    - Revenue: 8540
+    - Expenses: 7113
+    - Liabilities: 2142
