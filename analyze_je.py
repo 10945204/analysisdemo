@@ -1,6 +1,15 @@
 import pandas as pd
 import matplotlib.pyplot as plt
 import sys
+import numpy as np
+
+def get_leading_digit(n):
+    """Extracts the first non-zero digit (1-9) from a number."""
+    s = str(n)
+    for char in s:
+        if char in '123456789':
+            return int(char)
+    return None
 
 def analyze_je():
     try:
@@ -11,6 +20,9 @@ def analyze_je():
         # Clean data
         # Debit seems to be object type, convert to numeric, coerce errors to NaN
         df['Debit'] = pd.to_numeric(df['Debit'], errors='coerce').fillna(0)
+
+        # Ensure AbsoluteAmount is populated correctly
+        df['AbsoluteAmount'] = df['Amount'].abs()
 
         # Ensure date columns are datetime
         df['EffectiveDate'] = pd.to_datetime(df['EffectiveDate'])
@@ -58,6 +70,40 @@ def analyze_je():
                 for val, count in top_counts.items():
                     report_lines.append(f"    - {val}: {count}")
 
+        # Benford's Law Analysis
+        report_lines.append("\nBenford's Law Analysis:")
+        df['LeadingDigit'] = df['AbsoluteAmount'].apply(get_leading_digit)
+        benford_df = df[df['LeadingDigit'].notna()].copy()
+        total_count = len(benford_df)
+
+        if total_count > 0:
+            actual_counts = benford_df['LeadingDigit'].value_counts().sort_index()
+            expected_probs = {1: 0.301, 2: 0.176, 3: 0.125, 4: 0.097, 5: 0.079, 6: 0.067, 7: 0.058, 8: 0.051, 9: 0.046}
+
+            report_lines.append(f"  Total analyzed entries: {total_count}")
+            report_lines.append(f"  {'Digit':<5} {'Actual %':<10} {'Expected %':<10} {'Diff %':<10} {'Flag'}")
+
+            digits = range(1, 10)
+            actual_pcts = []
+            expected_pcts = []
+
+            for d in digits:
+                count = actual_counts.get(d, 0)
+                actual_pct = count / total_count
+                expected_pct = expected_probs[d]
+                diff = actual_pct - expected_pct
+
+                actual_pcts.append(actual_pct)
+                expected_pcts.append(expected_pct)
+
+                flag = ""
+                if abs(diff) > 0.05:
+                    flag = "SIGNIFICANT DEVIATION"
+
+                report_lines.append(f"  {d:<5} {actual_pct:.1%}     {expected_pct:.1%}     {diff:+.1%}     {flag}")
+        else:
+             report_lines.append("  No valid amounts for Benford's Law analysis.")
+
         # Write report to file
         with open('analysis_report.txt', 'w') as f:
             f.write('\n'.join(report_lines))
@@ -104,6 +150,24 @@ def analyze_je():
         plt.ylabel('Frequency')
         plt.savefig('amount_distribution.png')
         plt.close()
+
+        # 5. Benford's Law Analysis
+        if total_count > 0:
+            plt.figure(figsize=(10, 6))
+            x = np.arange(1, 10)
+            width = 0.35
+
+            plt.bar(x - width/2, [p * 100 for p in actual_pcts], width, label='Actual')
+            plt.bar(x + width/2, [p * 100 for p in expected_pcts], width, label='Expected', alpha=0.7)
+
+            plt.xlabel('Leading Digit')
+            plt.ylabel('Frequency (%)')
+            plt.title("Benford's Law Analysis: Actual vs Expected")
+            plt.xticks(x)
+            plt.legend()
+            plt.tight_layout()
+            plt.savefig('benford_analysis.png')
+            plt.close()
 
         print("Charts generated.")
 
