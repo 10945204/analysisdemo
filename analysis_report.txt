@@ -74,3 +74,16 @@ Categorical Analysis (Top 5):
     - Revenue: 8540
     - Expenses: 7113
     - Liabilities: 2142
+
+Benford's Law Analysis:
+  Total analyzed entries: 37905
+  Digit Actual %   Expected % Diff %     Flag
+  1     30.2%     30.1%     +0.1%
+  2     18.3%     17.6%     +0.7%
+  3     11.8%     12.5%     -0.7%
+  4     9.1%     9.7%     -0.6%
+  5     7.5%     7.9%     -0.4%
+  6     6.3%     6.7%     -0.4%
+  7     5.0%     5.8%     -0.8%
+  8     4.5%     5.1%     -0.6%
+  9     7.4%     4.6%     +2.8%
